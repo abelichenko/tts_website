@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Профиль - TTS Website{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>👤 Профиль</h1>
+
+    <div class="user-info">
+        <p>📧 <strong>{{ current_user.email }}</strong></p>
+        <p>💰 Доступно токенов: <strong class="token-count">{{ current_user.tokens }}</strong></p>
+        {% if current_user.is_admin %}
+            <p>👑 <strong>Администратор</strong></p>
+        {% endif %}
+        <p>📅 Регистрация: {{ current_user.created_at.strftime('%d.%m.%Y') }}</p>
+    </div>
+
+    <div class="change-password">
+        <h2>🔒 Изменить пароль</h2>
+
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.current_password.label }}
+                {{ form.current_password(class="form-control", placeholder="Введите текущий пароль") }}
+                {% if form.current_password.errors %}
+                    <div class="error">{{ form.current_password.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.new_password.label }}
+                {{ form.new_password(class="form-control", placeholder="Введите новый пароль (минимум 6 символов)") }}
+                {% if form.new_password.errors %}
+                    <div class="error">{{ form.new_password.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.new_password2.label }}
+                {{ form.new_password2(class="form-control", placeholder="Повторите новый пароль") }}
+                {% if form.new_password2.errors %}
+                    <div class="error">{{ form.new_password2.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Изменить пароль</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+
+

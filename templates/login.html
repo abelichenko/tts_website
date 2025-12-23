@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Вход - TTS Website{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box">
+        <h2>🔐 Вход в систему</h2>
+
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(class="form-control", placeholder="your@email.com") }}
+                {% if form.email.errors %}
+                    <div class="error">{{ form.email.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class="form-control", placeholder="Введите пароль") }}
+                {% if form.password.errors %}
+                    <div class="error">{{ form.password.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Войти</button>
+        </form>
+
+        <p class="auth-footer">
+            Нет аккаунта? <a href="{{ url_for('register') }}">Зарегистрируйтесь</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

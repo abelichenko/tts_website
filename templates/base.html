@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TTS Website{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}" class="logo">🎤 TTS Website</a>
+            <ul class="nav-menu">
+                {% if current_user.is_authenticated %}
+                    {% if config.ENABLE_TTS %}
+                        <li><a href="{{ url_for('dashboard') }}">Панель</a></li>
+                    {% endif %}
+                    {% if config.ENABLE_VIDEO_DOWNLOAD %}
+                        <li><a href="{{ url_for('video') }}">Видео</a></li>
+                    {% endif %}
+                    {% if config.ENABLE_TRANSCRIBE %}
+                        <li><a href="{{ url_for('transcribe') }}">Транскрибация</a></li>
+                    {% endif %}
+                    {% if config.ENABLE_PRICING %}
+                        <li><a href="{{ url_for('pricing') }}">Тарифы</a></li>
+                    {% endif %}
+                    {% if current_user.is_admin and config.ENABLE_ADMIN %}
+                        <li><a href="{{ url_for('admin') }}">Админ</a></li>
+                    {% endif %}
+                    {% if config.ENABLE_PROFILE %}
+                        <li><a href="{{ url_for('profile') }}">Профиль</a></li>
+                    {% endif %}
+                    <li><span class="tokens">💰 {{ current_user.tokens }} токенов</span></li>
+                    <li><a href="{{ url_for('logout') }}">Выход</a></li>
+                {% else %}
+                    {% if config.ENABLE_PRICING %}
+                        <li><a href="{{ url_for('pricing') }}">Тарифы</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('login') }}">Вход</a></li>
+                    <li><a href="{{ url_for('register') }}">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 TTS Website. Powered by Edge TTS.</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Транскрибация - TTS Website{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>🎙️ Транскрибация видео/аудио</h1>
+
+    <div class="user-info">
+        <p>👤 <strong>{{ current_user.email }}</strong></p>
+        <p>💰 Доступно токенов: <strong class="token-count">{{ current_user.tokens }}</strong></p>
+        <p class="hint">💡 Стоимость: 1 минута видео/аудио = 10 токенов</p>
+        <p class="hint">🌍 Выберите язык для транскрибации или используйте автоопределение</p>
+    </div>
+
+    <div class="transcribe-form">
+        <h2>Загрузить файл</h2>
+        <p class="form-hint">Поддерживаются форматы: MP4 (видео) и MP3 (аудио)</p>
+
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.file.label }}
+                {{ form.file(class="form-control file-input", accept=".mp4,.mp3") }}
+                {% if form.file.errors %}
+                    <div class="error">{{ form.file.errors[0] }}</div>
+                {% endif %}
+                <small class="form-text">Максимальный размер файла: 100 МБ</small>
+            </div>
+
+            <div class="form-group">
+                {{ form.language.label }}
+                {{ form.language(class="form-control") }}
+                {% if form.language.errors %}
+                    <div class="error">{{ form.language.errors[0] }}</div>
+                {% endif %}
+                <small class="form-text">Выберите язык речи в файле или "Автоопределение"</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-large">
+                🎯 Транскрибировать
+            </button>
+        </form>
+    </div>
+
+    <div class="transcribe-info">
+        <h3>ℹ️ Информация</h3>
+        <ul>
+            <li>Выберите язык речи в файле для более точного распознавания</li>
+            <li>Или используйте "Автоопределение" - система сама определит язык</li>
+            <li>Поддерживаются: английский, русский, украинский и многие другие языки</li>
+            <li>Результат сохраняется в текстовый файл (.txt)</li>
+            <li>Минимальная стоимость: 1 токен (даже для файлов короче 1 минуты)</li>
+            <li>Точность распознавания зависит от качества звука в файле</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    // Показ имени выбранного файла
+    const fileInput = document.querySelector('input[type="file"]');
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                const label = this.nextElementSibling;
+                if (label && label.tagName === 'LABEL') {
+                    // Можно добавить отображение имени файла
+                }
+            }
+        });
+    }
+</script>
+{% endblock %}
+
+

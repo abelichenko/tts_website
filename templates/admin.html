@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Админ-панель - TTS Website{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
+    <h1>👑 Админ-панель</h1>
+
+    <div class="stats">
+        <div class="stat-card">
+            <h3>👥 Пользователей</h3>
+            <p class="stat-number">{{ total_users }}</p>
+        </div>
+        <div class="stat-card">
+            <h3>🎵 Конвертаций</h3>
+            <p class="stat-number">{{ total_conversions }}</p>
+        </div>
+    </div>
+
+    <div class="grant-tokens">
+        <h2>💰 Выдать токены</h2>
+
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+
+            <div class="form-row">
+                <div class="form-group">
+                    {{ form.email.label }}
+                    {{ form.email(class="form-control", placeholder="user@example.com") }}
+                    {% if form.email.errors %}
+                        <div class="error">{{ form.email.errors[0] }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form.tokens.label }}
+                    {{ form.tokens(class="form-control", placeholder="100") }}
+                    {% if form.tokens.errors %}
+                        <div class="error">{{ form.tokens.errors[0] }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                {{ form.note.label }}
+                {{ form.note(class="form-control", placeholder="Причина выдачи (необязательно)") }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Выдать токены</button>
+        </form>
+    </div>
+
+    <div class="grant-admin">
+        <h2>👑 Выдать админ-статус</h2>
+
+        <form method="POST" action="">
+            {{ admin_form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ admin_form.email.label }}
+                {{ admin_form.email(class="form-control", placeholder="user@example.com") }}
+                {% if admin_form.email.errors %}
+                    <div class="error">{{ admin_form.email.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" name="grant_admin" class="btn btn-primary">Выдать админ-статус</button>
+        </form>
+    </div>
+
+    <div class="users-list">
+        <h2>👥 Пользователи</h2>
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Токенов</th>
+                    <th>Админ</th>
+                    <th>Регистрация</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td><strong>{{ user.tokens }}</strong></td>
+                    <td>{% if user.is_admin %}✅{% else %}❌{% endif %}</td>
+                    <td>{{ user.created_at.strftime('%d.%m.%Y') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="transactions">
+        <h2>📊 Последние транзакции</h2>
+        <table class="transactions-table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Пользователь</th>
+                    <th>Токены</th>
+                    <th>Тип</th>
+                    <th>Примечание</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for trans in recent_transactions %}
+                <tr>
+                    <td>{{ trans.created_at.strftime('%d.%m %H:%M') }}</td>
+                    <td>{{ trans.user.email }}</td>
+                    <td class="{% if trans.amount > 0 %}positive{% else %}negative{% endif %}">
+                        {% if trans.amount > 0 %}+{% endif %}{{ trans.amount }}
+                    </td>
+                    <td>
+                        {% if trans.transaction_type == 'grant' %}📥 Выдано
+                        {% elif trans.transaction_type == 'use' %}📤 Использовано
+                        {% else %}{{ trans.transaction_type }}
+                        {% endif %}
+                    </td>
+                    <td>{{ trans.note or '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

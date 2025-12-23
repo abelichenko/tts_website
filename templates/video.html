@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Скачать видео - TTS Website{% endblock %}
+
+{% block content %}
+<div class="dashboard">
+    <h1>📥 Скачивание видео</h1>
+
+    <div class="user-info">
+        <p>👤 <strong>{{ current_user.email }}</strong></p>
+        <p>💰 Доступно токенов: <strong class="token-count">{{ current_user.tokens }}</strong></p>
+        <p class="hint">Стоимость скачивания одного видео: <strong>1 токен</strong></p>
+        <p class="hint">Поддерживаются: <strong>YouTube, TikTok, Instagram Reels</strong></p>
+    </div>
+
+    <div class="tts-form">
+        <h2>Укажите ссылку на видео</h2>
+
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.url.label }}
+                {{ form.url(class="form-control", placeholder="Вставьте ссылку на видео...") }}
+                {% if form.url.errors %}
+                    <div class="error">{{ form.url.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-large">
+                ⬇️ Скачать видео (1 токен)
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+

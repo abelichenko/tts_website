@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Регистрация - TTS Website{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-box">
+        <h2>📝 Регистрация</h2>
+
+        <div class="bonus-info">
+            🎁 При регистрации вы получите <strong>100 бесплатных токенов!</strong>
+        </div>
+
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(class="form-control", placeholder="your@email.com") }}
+                {% if form.email.errors %}
+                    <div class="error">{{ form.email.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password.label }}
+                {{ form.password(class="form-control", placeholder="Минимум 6 символов") }}
+                {% if form.password.errors %}
+                    <div class="error">{{ form.password.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
+                {{ form.password2.label }}
+                {{ form.password2(class="form-control", placeholder="Повторите пароль") }}
+                {% if form.password2.errors %}
+                    <div class="error">{{ form.password2.errors[0] }}</div>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Зарегистрироваться</button>
+        </form>
+
+        <p class="auth-footer">
+            Уже есть аккаунт? <a href="{{ url_for('login') }}">Войти</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
